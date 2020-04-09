@@ -8,6 +8,14 @@ public class Root : MonoBehaviour
 
     Game game;
 
+    public  Button startBtn;
+
+    public Transform FollowBtns;
+
+    public Transform btns;
+
+
+
     public void Back()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
@@ -16,7 +24,8 @@ public class Root : MonoBehaviour
 
     public void StartGame()
     {
-
+        game.Init();
+        UpdateUI();
     }
 
     public void CardClick(int  type)
@@ -24,7 +33,15 @@ public class Root : MonoBehaviour
 
     }
 
+    void UpdateUI()
+    {
+        startBtn.gameObject.SetActive(!game.isStart);
+        FollowBtns.gameObject.SetActive(game.currentPlayer==0);
+        btns.gameObject.SetActive(game.currentPlayer==0);
+    }
 
+
+    
     private void Start()
     {
         game = this.GetComponent<Game>();
@@ -32,39 +49,5 @@ public class Root : MonoBehaviour
 
 
 
-
-}
-
-public class PlayerUI
-{
-
-    public Transform HeapPos;
-
-    public Transform CountDown;
-
-    public Text CountTxt;
-
-    public Text hp;
-
-    public Player player;
-
-    public void Init(Transform tran,Player player)
-    {
-        this.player = player;
-        HeapPos = tran.Find("HeapPos");
-        CountDown = tran.Find("CountDown");
-        CountTxt = CountDown.Find("CountTxt").GetComponent<Text>();
-        hp= tran.Find("hp").GetComponent<Text>();
-    }
-
-    public void Update()
-    {
-        if (player != null)
-        {
-            hp.text = player.Hp.ToString();
-
-
-        }
-    }
 
 }
