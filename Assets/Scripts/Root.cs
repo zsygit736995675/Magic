@@ -33,7 +33,7 @@ public class Root : MonoBehaviour
 
     }
 
-    void UpdateUI()
+   public  void UpdateUI()
     {
         startBtn.gameObject.SetActive(!game.isStart);
         FollowBtns.gameObject.SetActive(game.currentPlayer==0);

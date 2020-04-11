@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class Player 
 {
@@ -24,11 +25,14 @@ public class Player
 
     public Game game;
 
+    public Card currentCard;
+
+
+
     public void Init()
     {
         cards.Clear();
         Hp = 5;
-
 
         UpdateUI();
     }
@@ -38,8 +42,6 @@ public class Player
 
         hpText.text = Hp.ToString();
         CountDown.gameObject.SetActive(game.currentPlayer == Index);
-
-       
     }
 
 
@@ -57,7 +59,24 @@ public class Player
         Init();
     }
 
+    public void Receive(Card card)
+    {
+        card.transform.SetParent(HeapPos);
+        card.transform.localScale=Vector3.one;
+        cards.Add(card);
+        card.GetComponent<Button>().onClick.AddListener(()=> {
+
+           
+
+        });
+    }
 
 
-    
+    public void Action()
+    {
+        cards[game.currentRound].transform.DOScale(new Vector3(1.2f,1.2f,1.2f),0.3f);
+
+    }
+
+
 }

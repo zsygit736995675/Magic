@@ -33,10 +33,11 @@ public class Game : MonoBehaviour
 
     int index;
 
-    int targetCount = 0;
+    int targetCount = 0;//目标发牌张数
 
-    int currentCount = 0;
+    int currentCount = 0;//当前发牌的张数
 
+    public int currentRound = 0;//回合数
 
 
     private void Start()
@@ -57,6 +58,9 @@ public class Game : MonoBehaviour
     public void RandomCardLibraries()
     {
         currentPlayer = -1;
+        currentRound = -1;
+        targetCount = 15;
+        currentCount = 0;
 
         for (int i = 0; i < 36; i++)
         {
@@ -64,15 +68,13 @@ public class Game : MonoBehaviour
             cardLibrary.Add((CardType)range);
         }
 
-        targetCount = 15;
-        currentCount = 0;
-        Licensing();
+        Licensing(Next);
     }
 
     /// <summary>
     /// 發牌
     /// </summary>
-    private void Licensing()
+    private void Licensing(System.Action callback)
     {
         currentCount++;
 
@@ -88,20 +90,30 @@ public class Game : MonoBehaviour
             float timeCount = 0;
             DOTween.To(() => timeCount, a => timeCount = a, 1, 0.5f).OnComplete(() =>
             {
-
-                Licensing();
-
+                players[index].Receive(card);
+                index++;
+                index = index % 3;
+                Licensing(callback);
             });
-
-            index++;
-            index = index % 3;
         }
         else
         {
-
+            callback?.Invoke();
         }
     }
 
+    private void Next()
+    {
+        currentPlayer ++;
+        currentPlayer = currentPlayer % 2;
+        if (currentPlayer == 0)
+        {
+            currentRound++;
+        }
+
+        root.UpdateUI();
+        players[currentPlayer].Action();
+    }
 
 
     /// <summary>
