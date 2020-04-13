@@ -30,13 +30,13 @@ public class Root : MonoBehaviour
 
     public void CardClick(int  type)
     {
-
+        game.players[game.currentPlayer].GuessCard(type);
     }
 
    public  void UpdateUI()
     {
         startBtn.gameObject.SetActive(!game.isStart);
-        FollowBtns.gameObject.SetActive(game.currentPlayer==0);
+        
         btns.gameObject.SetActive(game.currentPlayer==0);
     }
 

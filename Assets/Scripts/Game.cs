@@ -21,7 +21,7 @@ public enum CardType
 public class Game : MonoBehaviour
 {
 
-    private Dictionary<int, Player> players = new Dictionary<int, Player>();
+    public Dictionary<int, Player> players = new Dictionary<int, Player>();
 
     public int currentPlayer=2;
 
@@ -76,36 +76,56 @@ public class Game : MonoBehaviour
     /// </summary>
     private void Licensing(System.Action callback)
     {
-        currentCount++;
-
-        if (currentCount <= targetCount)
+        if (cardLibrary.Count > 0)
         {
-            GameObject go = Resources.Load<GameObject>("Prefab/card");
-            GameObject ingo = GameObject.Instantiate(go);
-            Card card = ingo.AddComponent<Card>();
-            card.transform.SetParent(transform);
-            card.transform.position = root.startBtn.transform.position;
+            currentCount++;
 
-            card.transform.DOMove(players[index].HeapPos.transform.position, 0.5f);
-            float timeCount = 0;
-            DOTween.To(() => timeCount, a => timeCount = a, 1, 0.5f).OnComplete(() =>
+            if (currentCount <= targetCount)
             {
-                players[index].Receive(card);
-                index++;
-                index = index % 3;
-                Licensing(callback);
-            });
+                GameObject go = Resources.Load<GameObject>("Prefab/card");
+                GameObject ingo = GameObject.Instantiate(go);
+                Card card = ingo.AddComponent<Card>();
+                card.transform.SetParent(transform);
+                card.transform.position = root.startBtn.transform.position;
+                card.type = cardLibrary[0];
+                cardLibrary.Remove(0);
+
+                card.transform.DOMove(players[index].HeapPos.transform.position, 0.5f);
+                float timeCount = 0;
+                DOTween.To(() => timeCount, a => timeCount = a, 1, 0.5f).OnComplete(() =>
+                {
+                    players[index].Receive(card);
+                    index++;
+                    index = index % 3;
+                    Licensing(callback);
+                });
+            }
+            else
+            {
+                callback?.Invoke();
+            }
         }
         else
         {
-            callback?.Invoke();
+            ///游戏结束
+            
+
+        
         }
+      
     }
 
-    private void Next()
+    public void GameOver()
+    {
+
+    }
+
+
+
+    public void Next()
     {
         currentPlayer ++;
-        currentPlayer = currentPlayer % 2;
+        currentPlayer = currentPlayer % 3;
         if (currentPlayer == 0)
         {
             currentRound++;
@@ -126,7 +146,8 @@ public class Game : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 Transform p =  transform.Find("player"+i);
-                Player player = new Player(i,p,this);
+                Player player = p.gameObject.AddComponent<Player>();
+                player.Init(i,this);
                 players.Add(i,player ) ;
             }
         }

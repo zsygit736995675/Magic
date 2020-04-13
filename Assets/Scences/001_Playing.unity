@@ -951,6 +951,8 @@ MonoBehaviour:
   currentPlayer: -1
   isStart: 0
   cardLibrary: 
+  root: {fileID: 0}
+  currentRound: 0
 --- !u!1 &521692277
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,7 +1801,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &821417957
 RectTransform:
   m_ObjectHideFlags: 0
