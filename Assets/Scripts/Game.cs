@@ -4,19 +4,6 @@ using UnityEngine;
 using DG.Tweening;
 
 
-public enum CardType
-{
-            
-    dragon=1,
-    ghost,
-    dream,
-    owl,
-    storm,
-    ice,
-    fire,
-    heal,
-    Max
-}
 
 public class Game : MonoBehaviour
 {
@@ -40,17 +27,13 @@ public class Game : MonoBehaviour
     public int currentRound = 0;//回合数
 
 
+
+
     private void Start()
     {
         root = gameObject.GetComponent<Root>();
+
     }
-
-
-    private void Update()
-    {
-        
-    }
-
 
     /// <summary>
     /// 随机生成牌库
@@ -88,7 +71,8 @@ public class Game : MonoBehaviour
                 card.transform.SetParent(transform);
                 card.transform.position = root.startBtn.transform.position;
                 card.type = cardLibrary[0];
-                cardLibrary.Remove(0);
+                card.game = this;
+                cardLibrary.RemoveAt(0);
 
                 card.transform.DOMove(players[index].HeapPos.transform.position, 0.5f);
                 float timeCount = 0;
@@ -108,18 +92,10 @@ public class Game : MonoBehaviour
         else
         {
             ///游戏结束
-            
-
-        
+            root.GameOver(0);
         }
       
     }
-
-    public void GameOver()
-    {
-
-    }
-
 
 
     public void Next()
@@ -128,6 +104,17 @@ public class Game : MonoBehaviour
         currentPlayer = currentPlayer % 3;
         if (currentPlayer == 0)
         {
+            if (currentRound >= players[0].cards.Count - 1)
+            {
+                targetCount = 3;
+                currentCount = 0;
+
+                currentPlayer--;
+                currentPlayer = currentPlayer % 3;
+                Licensing(Next);
+                return;
+            }
+
             currentRound++;
         }
 

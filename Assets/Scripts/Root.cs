@@ -14,7 +14,9 @@ public class Root : MonoBehaviour
 
     public Transform btns;
 
-
+    public Transform settlement;
+    public Text settleText;
+    public Button settleBtn;
 
     public void Back()
     {
@@ -40,11 +42,27 @@ public class Root : MonoBehaviour
         btns.gameObject.SetActive(game.currentPlayer==0);
     }
 
+    public void GameOver(int index)
+    {
+        settlement.gameObject.SetActive(true);
 
-    
+        if (index == 0)
+        {
+            settleText.text = "玩家失败";
+        }
+        else
+        {
+            //胜利
+            settleText.text = "玩家胜利";
+        }
+    }
+
+
     private void Start()
     {
         game = this.GetComponent<Game>();
+
+        settleBtn.onClick.AddListener(Back);
     }
 
 
