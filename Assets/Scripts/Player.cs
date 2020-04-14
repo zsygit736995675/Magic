@@ -62,6 +62,13 @@ public class Player :MonoBehaviour
         card.transform.SetParent(HeapPos);
         card.transform.localScale=Vector3.one;
         card.owner = this.Index;
+
+        if (this.Index != 0)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Images/Cards/Card_" + (int)card.type);
+            card.gameObject.GetComponent<Image>().sprite = sprite;
+        }
+
         cards.Add(card);
     }
 
@@ -131,8 +138,11 @@ public class Player :MonoBehaviour
 
         CountDown.gameObject.SetActive(false);
 
-        Sprite sprite = Resources.Load<Sprite>("Images/Cards/Card_" + (int)currentCard.type);
-        currentCard.gameObject.GetComponent<Image>().sprite = sprite;
+        if (Index == 0)
+        {
+            Sprite sprite = Resources.Load<Sprite>("Images/Cards/Card_" + (int)currentCard.type);
+            currentCard.gameObject.GetComponent<Image>().sprite = sprite;
+        }
 
         if (type == (int)currentCard.type)
         {
